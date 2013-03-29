@@ -4,4 +4,20 @@ class Chef < Model
   end
 
   attr_accessible :first_name, :last_name, :mentor
+
+  def proteges
+    query = <<-SQL
+      SELECT c2.*
+        FROM chef c1 JOIN chef c2
+          ON c1.id = c2.mentor
+       WHERE c1.id = :id
+    SQL
+
+    self.class.multi_query(Chef, query, :id => self.id)
+  end
+
+  def num_proteges
+
+
+  end
 end
