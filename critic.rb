@@ -15,4 +15,15 @@ class Critic < Model
 
     self.class.multi_query(RestaurantReview, query, :id => self.id)
   end
+
+  def avg_review_score
+    query = <<-SQL
+      SELECT AVG(score)
+        FROM critic JOIN restaurant_review
+          ON id = critic_id
+       WHERE id = :id
+    SQL
+
+    DB.execute(query, :id => id)
+  end
 end
