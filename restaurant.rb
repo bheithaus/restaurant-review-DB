@@ -35,6 +35,6 @@ class Restaurant < Model
          WHERE name = :name
     SQL
 
-    DB.execute(query, :name => self.name)
+    DB.execute(query, :name => self.name)[0].values[0]
   end
 end

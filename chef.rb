@@ -17,7 +17,13 @@ class Chef < Model
   end
 
   def num_proteges
+    query = <<-SQL
+      SELECT COUNT(*)
+        FROM chef c1 JOIN chef c2
+          ON c1.id = c2.mentor
+       WHERE c1.id = :id
+    SQL
 
-
+    DB.execute(query, :id => self.id)[0].values[0]
   end
 end

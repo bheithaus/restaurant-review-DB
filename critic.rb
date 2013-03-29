@@ -24,6 +24,6 @@ class Critic < Model
        WHERE id = :id
     SQL
 
-    DB.execute(query, :id => id)
+    DB.execute(query, :id => id)[0].values[0]
   end
 end
