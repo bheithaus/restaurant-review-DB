@@ -17,6 +17,19 @@ class Restaurant < Model
     multi_query(Restaurant, query, :n => n)
   end
 
+  def self.highly_reviewed_restaurants(min_reviews)
+    query = <<-SQL
+        SELECT restaurants.*
+          FROM restaurants
+          JOIN restaurant_reviews
+            ON id = restaurant_id
+      GROUP BY id
+        HAVING COUNT(*) >= :min
+    SQL
+
+    multi_query(Restaurant, query, :min => min_reviews)
+  end
+
   def self.by_neighborhood(neighborhood)
     query = <<-SQL
       SELECT *
