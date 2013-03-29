@@ -1,13 +1,12 @@
 class Restaurant < Model
-
   def self.table_name
-    "restaurant"
+    "restaurants"
   end
 
   def self.by_neighborhood(neighborhood)
     query = <<-SQL
       SELECT *
-      FROM restaurant
+      FROM restaurants
       WHERE neighborhood = ?
     SQL
 
@@ -18,8 +17,9 @@ class Restaurant < Model
 
   def reviews
     query = <<-SQL
-      SELECT restaurant_review.*
-        FROM restaurant JOIN restaurant_review
+      SELECT restaurant_reviews.*
+        FROM restaurants
+        JOIN restaurant_reviews
           ON id = restaurant_id
        WHERE id = :id
     SQL
@@ -30,7 +30,8 @@ class Restaurant < Model
   def avg_review_score
     query = <<-SQL
         SELECT AVG(score)
-          FROM restaurant JOIN restaurant_review
+          FROM restaurants
+          JOIN restaurant_reviews
             ON id = restaurant_id
          WHERE name = :name
     SQL

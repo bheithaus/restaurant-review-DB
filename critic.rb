@@ -1,6 +1,6 @@
 class Critic < Model
   def self.table_name
-    "critic"
+    "critics"
   end
 
   attr_accessible :screen_name
@@ -8,7 +8,8 @@ class Critic < Model
   def reviews
     query = <<-SQL
       SELECT restaurant_review.*
-        FROM critic JOIN restaurant_review
+        FROM critics
+        JOIN restaurant_reviews
           ON id = critic_id
        WHERE id = :id
     SQL
@@ -19,7 +20,8 @@ class Critic < Model
   def avg_review_score
     query = <<-SQL
       SELECT AVG(score)
-        FROM critic JOIN restaurant_review
+        FROM critics
+        JOIN restaurant_reviews
           ON id = critic_id
        WHERE id = :id
     SQL

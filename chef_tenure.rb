@@ -1,7 +1,7 @@
 class ChefTenure < Model
 
   def self.table_name
-    "chef_tenure"
+    "chef_tenures"
   end
 
   attr_accessible :chef_id, :restaurant_id, :is_head_chef,
