@@ -3,8 +3,18 @@ class Restaurant < Model
     "restaurants"
   end
 
-  def self.top_restaurants
+  def self.top_restaurants(n)
+    query = <<-SQL
+      SELECT restaurants.*
+        FROM restaurants
+        JOIN restaurant_reviews
+          ON id = restaurant_id
+    GROUP BY id
+    ORDER BY AVG(score) DESC
+       LIMIT :n
+    SQL
 
+    multi_query(Restaurant, query, :n => n)
   end
 
   def self.by_neighborhood(neighborhood)
