@@ -3,6 +3,10 @@ class Restaurant < Model
     "restaurants"
   end
 
+  def self.top_restaurants
+
+  end
+
   def self.by_neighborhood(neighborhood)
     query = <<-SQL
       SELECT *

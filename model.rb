@@ -101,5 +101,4 @@ class Model
     def table_name
       self.class.table_name
     end
-
 end

@@ -28,4 +28,17 @@ class Critic < Model
 
     DB.execute(query, :id => id)[0].values[0]
   end
+
+  def unreviewed_restaurants
+    query = <<-SQL
+      SELECT restaurants.*
+        FROM restaurants
+       WHERE id NOT IN
+     (SELECT restaurant_id
+        FROM restaurant_reviews
+       WHERE critic_id = :id)
+    SQL
+
+    self.class.multi_query(Restaurant, query, :id => self.id)
+  end
 end
