@@ -21,10 +21,10 @@ class Restaurant < Model
       SELECT restaurant_review.*
         FROM restaurant JOIN restaurant_review
           ON id = restaurant_id
-       WHERE name = :name
+       WHERE id = :id
     SQL
 
-    self.class.multi_query(RestaurantReview, query, :name => self.name)
+    self.class.multi_query(RestaurantReview, query, :id => self.id)
   end
 
   def avg_review_score
@@ -34,6 +34,7 @@ class Restaurant < Model
             ON id = restaurant_id
          WHERE name = :name
     SQL
+
     DB.execute(query, :name => self.name)
   end
 end

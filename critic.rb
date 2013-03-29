@@ -7,8 +7,12 @@ class Critic < Model
 
   def reviews
     query = <<-SQL
-      SELECT *
-
+      SELECT restaurant_review.*
+        FROM critic JOIN restaurant_review
+          ON id = critic_id
+       WHERE id = :id
     SQL
+
+    self.class.multi_query(RestaurantReview, query, :id => self.id)
   end
 end
