@@ -7,7 +7,7 @@ class Restaurant < Model
     query = <<-SQL
       SELECT restaurants.*
         FROM restaurants
-        JOIN restaurant_reviews
+        JOIN reviews
           ON id = restaurant_id
     GROUP BY id
     ORDER BY AVG(score) DESC
@@ -21,7 +21,7 @@ class Restaurant < Model
     query = <<-SQL
         SELECT restaurants.*
           FROM restaurants
-          JOIN restaurant_reviews
+          JOIN reviews
             ON id = restaurant_id
       GROUP BY id
         HAVING COUNT(*) >= :min
@@ -41,24 +41,13 @@ class Restaurant < Model
   end
 
   attr_accessible :name, :neighborhood, :cuisine
-
-  def reviews
-    query = <<-SQL
-      SELECT restaurant_reviews.*
-        FROM restaurants
-        JOIN restaurant_reviews
-          ON id = restaurant_id
-       WHERE id = :id
-    SQL
-
-    self.class.multi_query(RestaurantReview, query, :id => self.id)
-  end
+  has_many :reviews
 
   def avg_review_score
     query = <<-SQL
         SELECT AVG(score)
           FROM restaurants
-          JOIN restaurant_reviews
+          JOIN reviews
             ON id = restaurant_id
          WHERE name = :name
     SQL

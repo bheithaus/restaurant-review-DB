@@ -3,7 +3,7 @@ class Chef < Model
     "chefs"
   end
 
-  attr_accessible :first_name, :last_name, :mentor
+  attr_accessible :id, :first_name, :last_name, :mentor
 
   def co_workers
     #chefs who worked with this one at same restaurant at same time
@@ -28,14 +28,14 @@ class Chef < Model
     query = <<-SQL
       SELECT reviews.*
         FROM chef_tenures tenures
-        JOIN restaurant_reviews reviews
+        JOIN reviews reviews
           ON tenures.restaurant_id = reviews.restaurant_id
        WHERE reviews.day BETWEEN tenures.start_date AND tenures.end_date
          AND tenures.is_head_chef = 1
          AND tenures.chef_id = :id
     SQL
 
-    self.class.multi_query(RestaurantReview, query, :id => self.id)
+    self.class.multi_query(Review, query, :id => self.id)
   end
 
   def proteges

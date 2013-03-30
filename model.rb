@@ -33,23 +33,31 @@ class Model
 
   def initialize(options = {})
 		options = options.each_with_object({}) { |(k, v), h| h[k.to_s] = v }
-    ##hmmmm, oh the response from sqlite db?
-
     @id = options['id']
-
     column_names.each do |column_name|
       self.send("#{column_name}=", options[column_name.to_s])
     end
   end
 
-  def column_values
-    column_names.map { |column_name| self.send(column_name) }
+  ##fun to build (only got to delete one reviews method, but maybe)
+  def self.has_many(others)
+    get_many = Proc.new do
+      query = <<-SQL
+          SELECT #{others}.*
+            FROM #{table_name}
+            JOIN #{others}
+              ON id = #{table_name[0..-2]}_id
+           WHERE id = :id
+        SQL
+      self.class.multi_query(Kernel.const_get(others.to_s[0..-2].capitalize), query, self.id)
+    end
+
+    self.send(:define_method, others, &get_many)
   end
 
   def create
     column_names_s = column_names.join(", ")
     questions_marks_s = Array.new(column_names.count, "?").join(", ")
-
     query = <<-SQL
       INSERT INTO #{table_name} (#{column_names_s})
       VALUES (#{questions_marks_s})
@@ -79,6 +87,10 @@ class Model
     else
       create
     end
+  end
+
+  def column_values
+    column_names.map { |column_name| self.send(column_name) }
   end
 
   private

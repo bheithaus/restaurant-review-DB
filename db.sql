@@ -27,7 +27,7 @@ CREATE TABLE critics (
   screen_name VARCHAR(30) NOT NULL
 );
 
-CREATE TABLE restaurant_reviews (
+CREATE TABLE reviews (
   critic_id INTEGER NOT NULL,
   restaurant_id INTEGER NOT NULL,
   review TEXT,

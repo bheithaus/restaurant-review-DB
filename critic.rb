@@ -4,24 +4,13 @@ class Critic < Model
   end
 
   attr_accessible :screen_name
-
-  def reviews
-    query = <<-SQL
-      SELECT restaurant_review.*
-        FROM critics
-        JOIN restaurant_reviews
-          ON id = critic_id
-       WHERE id = :id
-    SQL
-
-    self.class.multi_query(RestaurantReview, query, :id => self.id)
-  end
+  has_many :reviews
 
   def avg_review_score
     query = <<-SQL
       SELECT AVG(score)
         FROM critics
-        JOIN restaurant_reviews
+        JOIN reviews
           ON id = critic_id
        WHERE id = :id
     SQL
@@ -35,7 +24,7 @@ class Critic < Model
         FROM restaurants
        WHERE id NOT IN
      (SELECT restaurant_id
-        FROM restaurant_reviews
+        FROM reviews
        WHERE critic_id = :id)
     SQL
 

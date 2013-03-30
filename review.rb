@@ -1,7 +1,8 @@
-class RestaurantReview < Model
+class Review < Model
   def self.table_name
-    "restaurant_reviews"
+    "reviews"
   end
 
-  attr_accessible :critic_id, :restaurant_id, :review, :score, :day
+  attr_accessible :critic_id, :restaurant_id, :review,
+                  :score, :day
 end
